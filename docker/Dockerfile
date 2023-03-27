@@ -16,4 +16,5 @@ RUN NGINX_ARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') \
 
 FROM nginx:1.22.1-alpine
 
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_nchan_module.so /usr/lib/nginx/modules/

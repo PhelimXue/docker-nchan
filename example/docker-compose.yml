@@ -1,0 +1,9 @@
+web:
+  image: phelimxue/nchan:1.3.6-alpine
+  volumes:
+   - ./conf.d:/etc/nginx/conf.d
+   - ./nchan.html:/usr/share/nginx/html/nchan.html
+  ports:
+   - "80:80"
+  environment:
+   - NGINX_PORT=80

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+    <meta charset="utf-8" />
+    <title>WebSocket Test</title>
+    <script language="javascript" type="text/javascript">
+        var output;
+            function init() {
+                output = document.getElementById("output");
+                testWebSocket();
+            }
+            function testWebSocket() {
+                var url = document.getElementById("url");
+                var channelId = document.getElementById("channelID");
+                var fullUrl = "ws://" + url.value + "/sub?id=" + channelId.value;
+                websocket = new WebSocket(fullUrl);
+                websocket.onopen = function(evt) {
+                    onOpen(evt)
+                    };
+                websocket.onclose = function(evt) {
+                    onClose(evt)
+                };
+                websocket.onmessage = function(evt) {
+                    onMessage(evt)
+                };
+                websocket.onerror = function(evt) {
+                    onError(evt)
+                };
+            }
+            function onOpen(evt) {
+                writeToScreen("CONNECTED");
+            }
+            function onClose(evt) {
+                writeToScreen("DISCONNECTED");
+            }
+            function onMessage(evt) {
+                writeToScreen('RESPONSE: ' + evt.data+'');
+            }
+            function onError(evt) {
+                writeToScreen('ERROR: ' + evt.data);
+            }
+            function writeToScreen(message) {
+                var pre = document.createElement("p"); pre.style.wordWrap = "break-word"; pre.innerHTML = message; output.appendChild(pre);
+            }
+        </script>
+        <h2>WebSocket Test</h2>
+
+Connection Location: <input type="text" id="url">
+<br><br>
+Channel ID: <input type="text" id="channelID">
+<br><br>
+<button id="connect" onClick="init()">Connect</button>
+        <div id="output"></div>
