@@ -1,6 +1,6 @@
-FROM nginx:1.26.2-alpine AS build
+FROM nginx:1.26.3-alpine AS build
 
-ENV NGINX_VERSION=1.26.2
+ENV NGINX_VERSION=1.26.3
 ENV NCHAN_VERSION=1.3.7
 
 RUN apk add --no-cache gcc make g++ zlib-dev linux-headers pcre-dev openssl-dev && mkdir /usr/src \
@@ -11,10 +11,10 @@ RUN apk add --no-cache gcc make g++ zlib-dev linux-headers pcre-dev openssl-dev 
 
 WORKDIR /usr/src/nginx-${NGINX_VERSION}
 RUN NGINX_ARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') \
-./configure --with-compat --with-http_ssl_module --add-dynamic-module=/usr/src/nchan-${NCHAN_VERSION} ${NGINX_ARGS} \
+./configure --with-compat --with-http_ssl_module --with-http_dav_module --add-dynamic-module=/usr/src/nchan-${NCHAN_VERSION} ${NGINX_ARGS} \
 && make modules
 
-FROM nginx:1.26.2-alpine
+FROM nginx:1.26.3-alpine
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /usr/src/nginx-${NGINX_VERSION}/objs/ngx_nchan_module.so /usr/lib/nginx/modules/
